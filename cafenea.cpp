@@ -9,6 +9,20 @@
 
 using namespace std;
 
+template <typename T>
+class Counter {
+    static int count;
+public:
+    Counter() { count++; }
+    ~Counter() { count--; }
+    static int getCount() { return count; }
+};
+
+
+template <typename T>
+int Counter<T>::count = 0;
+
+
 class Employee {
     protected:
         string lastName;
@@ -16,213 +30,146 @@ class Employee {
         string job;
         string startTime;
         string endTime;
-        vector<string> workDays;
+        string workDays;
         int nrOfDays;
-        static int nrOfEmployees;
         string roleDescription;
 
     public:
-        Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const vector<string>& wDays)
+        Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const string& wDays)
             : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays){
-            nrOfEmployees++;
         }
 
-        static int getNrOfEmployees() {
-            return nrOfEmployees;
+        virtual void displayInfo() const{
+            cout << job << ": " << lastName << " " << firstName << endl;
+            cout << "Program de lucru: " << startTime << " - " << endTime << endl;
+            cout << "Numarul de zile lucrate: " << nrOfDays << endl;
+            cout << "Zilele de lucru: " << workDays << endl;
+            cout << "\n--------------------------------------------\n";
         }
-
-        virtual void displayInfo() const = 0;
 
         virtual void displayRoleDescription() const{
             cout << roleDescription << endl;
         }
-
-
-        virtual ~Employee(){
-            nrOfEmployees--;
-        };
+        virtual ~Employee(){};
 
 };
 
-int Employee::nrOfEmployees = 0;
-
-class Manager : public Employee {
-    static int managerCount;
+class Manager : public Employee, public Counter<Manager> {
     
     public:
-        Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const vector<string>& wDays)
+        Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
             : Employee(fn, ln, "Manager", sT, eT,nr, wDays) {
-                managerCount++;
-                roleDescription = "Coordoneaza echipa si gestioneaza operatiunile generale.";
             }
 
         void displayInfo() const override {
-            cout << "Manager: " << lastName << " " << firstName << endl;
-            cout << "Job: " << job << endl;
-
-            cout << "Program de lucru: " << startTime << " - " << endTime << endl;
-            cout << "Numarul de zile lucrate: " << nrOfDays << endl;
-            cout << "Zilele de lucru: ";
-            
-            for(const auto& day : workDays){
-                cout << day << " ";
-            }
-            cout << "\n";
-            cout << "--------------------------------------------" << endl;
-            
-            
-        }
-
-        static int getManagerCount() {
-            return managerCount;
+            Employee::displayInfo();
         }
 
         void displayRoleDescription() {
+            roleDescription = "Coordoneaza echipa si gestioneaza operatiunile generale.";
             cout << roleDescription << endl;
         }
 
-        ~Manager() {
-            managerCount--;
-        }
+        ~Manager() {}
 };
 
-int Manager::managerCount = 0;
-
-class Waiter : public Employee {
-    static int waiterCount;
+class Waiter : public Employee, public Counter<Waiter> {
     
     public:
-        Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const vector<string>& wDays)
-            : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays) {
-                waiterCount++;
-                roleDescription = "Se ocupa de preluarea comenzilor, servirea clientilor si asigurarea unei experiente placute pentru acestia.";
-            }
-
+        Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays)
+            : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays) {}
         void displayInfo() const override {
-            cout << "Ospatar: " << lastName << " " << firstName << endl;
-            cout << "Job: " << job << endl;
-
-            cout << "Program de lucru: " << startTime << " - " << endTime << endl;
-
-            cout << "Numarul de zile lucrate: " << nrOfDays << endl;
-            cout << "Zilele de lucru: ";
-            
-            for(const auto& day : workDays){
-                cout << day << " ";
-            }
-            cout << "\n";
-            cout << "--------------------------------------------" << endl;
-
-        }
-
-        static int getWaiterCount() {
-            return waiterCount;
+            Employee::displayInfo();
         }
 
         void displayRoleDescription() {
+            roleDescription = "Se ocupa de preluarea comenzilor, servirea clientilor si asigurarea unei experiente placute pentru acestia.";
             cout << roleDescription << endl;
         }
 
-        ~Waiter() {
-            waiterCount--;
-        }
+        ~Waiter() {}
 };
 
-int Waiter::waiterCount = 0;
-
-class Barista : public Employee {
-
-    static int baristaCount;
+class Barista : public Employee, public Counter<Barista> {
 
     public:
-        Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const vector<string>& wDays)
-            : Employee(fn, ln, "Barista", sT, eT, nr, wDays) {
-                    baristaCount++;
-                    roleDescription = "Pregateste bauturi precum cafeaua si ceaiul.";
-            }
+        Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
+            : Employee(fn, ln, "Barista", sT, eT, nr, wDays) {}
 
         void displayInfo() const override {
-            cout << "Barista: " << lastName << " " << firstName << endl;
-            cout << "Job: " << job << endl;
-            
-            if (!startTime.empty() && !endTime.empty()) {
-                cout << "Program de lucru: " << startTime << " - " << endTime << endl;
-            } else {
-                cout << "Programul de lucru nu este setat corect.\n";
-            }
-
-            cout << "Numarul de zile lucrate: " << nrOfDays << endl;
-            cout << "Zilele de lucru: ";
-            
-            for(const auto& day : workDays){
-                cout << day << " ";
-            }
-            cout << "\n";
-            cout << "--------------------------------------------" << endl;
-        }
-
-        static int getBaristaCount() {
-            return baristaCount;
+            Employee::displayInfo();
         }
 
         void displayRoleDescription() {
+            roleDescription = "Pregateste bauturi precum cafeaua si ceaiul.";
             cout << roleDescription << endl;
         }
 
         ~Barista() {
-            baristaCount--;
         }
 };
 
-int Barista::baristaCount = 0;
 
+//Singleton
 class Menu {
-    vector<Employee*> employees;
+    private:
+        vector<Employee*> employees;
+        static Menu* instance;
 
-public:
-    Menu() {
-        try {
-            vector<vector<string>> data = readCSV("employee.csv");
+        // Constructor privat
+        Menu() {
+            try {
+                vector<vector<string>> data = readCSV("employee.csv");
 
-            for (const auto& line : data) {
-                if (line.size() < 8) continue;
+                for (const auto& line : data) {
+                    if (line.size() < 8) continue;
 
-                string firstName = line[0];
-                string lastName = line[1];
-                string job = line[2];
-                string city = line[3];
-                int nrOfDays = stoi(line[4]);
-                vector<string> workDays = splitString(line[5], ',');
-                string startTime = line[6];
-                string endTime = line[7];
+                    string firstName = line[0];
+                    string lastName = line[1];
+                    string job = line[2];
+                    string city = line[3];
+                    int nrOfDays = stoi(line[4]);
+                    string workDays = line[5];
+                    string startTime = line[6];
+                    string endTime = line[7];
 
-                if (job == "Manager") {
-                    employees.push_back(new Manager(firstName, lastName,startTime, endTime,nrOfDays, workDays));
-                } else if (job == "Ospatar") {
-                    employees.push_back(new Waiter(firstName, lastName, startTime, endTime,nrOfDays, workDays));
-                } else if (job == "Barista") {
-                    employees.push_back(new Barista(firstName, lastName, startTime, endTime,nrOfDays, workDays));
+                    if (job == "Manager") {
+                        employees.push_back(new Manager(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                    } else if (job == "Ospatar") {
+                        employees.push_back(new Waiter(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                    } else if (job == "Barista") {
+                        employees.push_back(new Barista(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                    }
                 }
+            } catch (const exception& e) {
+                cerr << "Eroare: " << e.what() << endl;
             }
-        } catch (const exception& e) {
-            cerr << "Eroare: " << e.what() << endl;
         }
-    }
 
-    ~Menu() {
-        for (auto employee : employees) {
-            delete employee;
+        // Destructor pentru eliberarea memoriei
+        ~Menu() {
+            for (auto employee : employees) {
+                delete employee;
+            }
         }
-    }
 
-    void addEmployee() {
-        try {
-            cout << "Introduceti nr de angajati pe care doriti sa ii adaugati: ";
-            int n;
-            cin >> n;
-            cin.ignore();
+    public:
 
-            vector<vector<string>> newData;
+        static Menu* getInstance() {
+            if (instance == nullptr) {
+                instance = new Menu();
+                cout << "S-a creat o instanta pentru prima data a meniului.\n";
+            }
+            return instance;
+        }
+
+        void addEmployee() {
+            try {
+                cout << "Introduceti nr de angajati pe care doriti sa ii adaugati: ";
+                int n;
+                cin >> n;
+                cin.ignore();
+                vector<vector<string>> newData;
 
             for (int i = 0; i < n; ++i) {
                 cout << "Introduceti datele pentru angajatul " << i + 1 << ":\n";
@@ -250,14 +197,8 @@ public:
                 cin >> nrOfDays;
                 cin.ignore();
 
-                cout << "Zilele lucrate (separate prin virgula): ";
+                cout << "Zilele lucrate (separate prin spatiu + trebuie sa corespunda cu numarul de zile): ";
                 getline(cin, workDaysInput);
-                vector<string> workDays = splitString(workDaysInput, ',');
-
-                if (workDays.size() != nrOfDays) {
-                    cerr << "Eroare: Numarul zilelor lucrate nu corespunde cu zilele introduse.\n";
-                    continue;
-                }
 
                 cout << "Ora de inceput: ";
                 getline(cin, startTime);
@@ -266,14 +207,14 @@ public:
                 getline(cin, endTime);
 
                 if (job == "Manager") {
-                    employees.push_back(new Manager(firstName, lastName, startTime, endTime,  nrOfDays, workDays));
+                    employees.push_back(new Manager(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
                 } else if (job == "Ospatar") {
-                    employees.push_back(new Waiter(firstName, lastName, startTime, endTime,  nrOfDays, workDays));
+                    employees.push_back(new Waiter(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
                 } else if (job == "Barista") {
-                    employees.push_back(new Barista(firstName, lastName, startTime, endTime,  nrOfDays, workDays));
+                    employees.push_back(new Barista(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
                 } else {
                     cerr << "Job invalid! Angajatul nu a fost adaugat.\n";
-                    continue;
+                    continue; 
                 }
 
                 vector<string> row = {"\n",lastName, firstName, job, city, to_string(nrOfDays), workDaysInput, startTime, endTime};
@@ -295,45 +236,65 @@ public:
         }
     }
 
-    void displayAllEmployees() {
-        for (auto employee : employees) {
-            employee->displayInfo();
-            cout << "----------------------------------------------\n";
+        void displayAllEmployees() {
+            try {
+                vector<vector<string>> data = readCSV("employee.csv"); // Recitește fișierul
+                if (data.empty()) {
+                    cout << "Nu exista angajati în baza de date.\n";
+                    return;
+                }
+
+                cout << "Angajatii existenti sunt:\n";
+                for (const auto& line : data) {
+                    for (const auto& field : line) {
+                        cout << field << " ";
+                    }
+                    cout << endl;
+                }
+            } catch (const exception& e) {
+                cerr << "Eroare la afișare: " << e.what() << endl;
+            }
         }
+
+        void printNumberOfEmployees() {
+
+        int nrOfEmployees = 0;
+        nrOfEmployees = Manager::getCount() + Waiter::getCount() + Barista::getCount();
+        cout << "Numarul de angajati: " << nrOfEmployees << endl;
     }
 
-    void printNumberOfEmployees() {
-        cout << "Numarul de angajati: " << Employee::getNrOfEmployees() << endl;
-    }
-
-    void displayEmployeeCounts() {
-        cout << "Numar de Manageri: " << Manager::getManagerCount() << endl;
-        cout << "Numar de Ospatari: " << Waiter::getWaiterCount() << endl;
-        cout << "Numar de Barista: " << Barista::getBaristaCount() << endl;
+        void displayEmployeeCounts() {
+        cout << "Numar de Manageri: " << Counter<Manager>::getCount() << endl;
+        cout << "Numar de Ospatari: " << Counter<Waiter>::getCount() << endl;
+        cout << "Numar de Barista: "  << Counter<Barista>::getCount() << endl;
     }
     
-    void deleteEmployee (const string& lastName, const string& firstName){
-        vector<vector<string>> data = readCSV("employee.csv");
-        vector<vector<string>> updateData;
+        void deleteEmployee (const string& lastName, const string& firstName){
 
-        bool found = false;
-        for(const auto& line : data){
-            if(line[0] == lastName && line[1] == firstName){
-                found = true;
-                continue;
-            }
-            updateData.push_back(line);
+            try{
+            
+                vector<vector<string>> updateData;
+                vector<vector<string>> data = readCSV("employee.csv");
+                    
+                bool found = false;
+                for(const auto& line : data){
+                    if(line[0] == lastName && line[1] == firstName){
+                        found = true;
+                        continue;
+                    }
+                    updateData.push_back(line);
+                }
+                if(found){
+                    writeCSV("employee.csv", updateData, false);
+                    cout << "Angajatul " << lastName << " " << firstName << " a fost sters cu succes!\n";
+                } else {
+                    cout << "Angajatul " << lastName << " " << firstName << " nu a fost gasit in baza de date!\n";
+                }
+            }catch (const exception& e) {
+            cerr << "Eroare: " << e.what() << endl;}
         }
 
-        if(found){
-            writeCSV("employee.csv", updateData, true);
-            cout << "Angajatul " << lastName << " " << firstName << " a fost sters cu succes!\n";
-        } else {
-            cout << "Angajatul " << lastName << " " << firstName << " nu a fost gasit in baza de date!\n";
-        }
-    }
-
-    void displayRoleDescription() {
+        void displayRoleDescription() {
 
         int choiceForRole;
         cout << "Alegeti un job pentru a vedea descrierea rolului:\n";
@@ -348,29 +309,37 @@ public:
             case 1:{
                 Manager m("fn", "ln", "08:00", "16:00", 0, {"zile"});
                 m.displayRoleDescription();
+                cout << "----------------------------------------------\n";
                 break;
             }
             case 2:{
                 Waiter w("fn", "ln", "08:00", "16:00", 0, {"zile"});
                 w.displayRoleDescription();
+                cout << "----------------------------------------------\n";
                 break;
             }
             case 3:{
                 Barista b("fn", "ln", "08:00", "16:00", 0, {"zile"});
                 b.displayRoleDescription();
+                cout << "----------------------------------------------\n";
                 break;
             }
             default:
                 cout << "Optiune invalida!\n";
         }
     }
+
+        static void destroyInstance() {
+        delete instance;
+        instance = nullptr;
+    }
 };
 
-
+Menu* Menu::instance = nullptr;
 
 int main(){
     
-    Menu menu;
+    Menu* menu = Menu::getInstance();
     
     int choice;
     int choiceForRole;
@@ -391,26 +360,44 @@ int main(){
 
         switch(choice){
             case 1:
-                menu.printNumberOfEmployees();
+                menu->printNumberOfEmployees();
                 break;
             case 2:
-                menu.addEmployee();
+                menu->addEmployee();
                 break;
             case 3:{
-                string nume, prenume;
-                cout << "Introduceti numele si prenumele angajatului pe care doriti sa il stergeti: ";
-                cin >> nume >> prenume;
-                menu.deleteEmployee(nume, prenume);
+
+                cout << "Introduceti numarul de angajati pe care doriti sa ii stergeti: ";
+                int n;
+                cin >> n;
+                cin.ignore();
+
+                string lastName, firstName;
+
+                for(int i = 0; i < n; ++i){
+
+                    cout << "Introduceti datele pentru angajatul " << i + 1 << ":\n";
+                    
+                    cout << "Nume: ";
+                    getline(cin, lastName);
+                    lastName = capitalizeWords(lastName);
+                
+                    cout << "Prenume: ";
+                    getline(cin, firstName);
+                    firstName = capitalizeWords(firstName);
+
+                    menu->deleteEmployee(lastName, firstName);
+                }
                 break;
             }
             case 4:
-                menu.displayAllEmployees();
+                menu->displayAllEmployees();
                 break;
             case 5:
-                menu.displayEmployeeCounts();
+                menu->displayEmployeeCounts();
                 break;
             case 6:
-                menu.displayRoleDescription();
+                menu->displayRoleDescription();
                 break;
             case 0:
                 cout << "La revedere!\n";
@@ -420,5 +407,6 @@ int main(){
         }
     }while(choice != 0);
     
+    Menu::destroyInstance();
     return 0;
 }
