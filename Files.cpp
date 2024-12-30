@@ -44,13 +44,8 @@ vector<vector<string>> readCSV(const string& filename){
 
     vector<vector<string>> allLines;
     string line;
-    bool firstLine = true;
 
     while(getline(file,line)){
-        if(firstLine){
-            firstLine = false;
-            continue;
-        }
 
         allLines.push_back(splitLine(line, ','));
     }

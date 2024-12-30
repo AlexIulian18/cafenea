@@ -14,7 +14,9 @@ class Counter {
     static int count;
 public:
     Counter() { count++; }
-    ~Counter() { count--; }
+    ~Counter() {
+        cout << "Destructor counter\n";
+        count--; }
     static int getCount() { return count; }
 };
 
@@ -39,6 +41,14 @@ class Employee {
             : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays){
         }
 
+        string getLastName() const {
+            return lastName;
+        }
+
+        string getFirstName() const {
+            return firstName;
+        }
+
         virtual void displayInfo() const{
             cout << job << ": " << lastName << " " << firstName << endl;
             cout << "Program de lucru: " << startTime << " - " << endTime << endl;
@@ -50,7 +60,9 @@ class Employee {
         virtual void displayRoleDescription() const{
             cout << roleDescription << endl;
         }
-        virtual ~Employee(){};
+        virtual ~Employee(){
+            cout << "Destructor angajat/employee\n";
+        };
 
 };
 
@@ -70,7 +82,9 @@ class Manager : public Employee, public Counter<Manager> {
             cout << roleDescription << endl;
         }
 
-        ~Manager() {}
+        ~Manager() {
+            cout << "Destructor manager\n";
+        }
 };
 
 class Waiter : public Employee, public Counter<Waiter> {
@@ -87,7 +101,9 @@ class Waiter : public Employee, public Counter<Waiter> {
             cout << roleDescription << endl;
         }
 
-        ~Waiter() {}
+        ~Waiter() {
+            cout << "Destructor ospatar\n";
+        }
 };
 
 class Barista : public Employee, public Counter<Barista> {
@@ -106,6 +122,7 @@ class Barista : public Employee, public Counter<Barista> {
         }
 
         ~Barista() {
+            cout << "Destructor barista\n";
         }
 };
 
@@ -120,12 +137,20 @@ class Menu {
         Menu() {
             try {
                 vector<vector<string>> data = readCSV("employee.csv");
+                cout << data.size() << " angajati gasiti in baza de date.\n";
+                
+                for (int j = 1; j < data.size(); j++) {
 
-                for (const auto& line : data) {
+                    const auto& line = data[j];
+                    
+                    for(int i = 0; i < line.size(); i++){
+                        cout << line[i] << " ";
+                    }
+                    cout << endl;
                     if (line.size() < 8) continue;
 
-                    string firstName = line[0];
-                    string lastName = line[1];
+                    string firstName = line[1];
+                    string lastName = line[0];
                     string job = line[2];
                     string city = line[3];
                     int nrOfDays = stoi(line[4]);
@@ -284,6 +309,18 @@ class Menu {
                     }
                     updateData.push_back(line);
                 }
+                
+                for(int i = 0; i < employees.size(); i++){
+                    cout << employees[i]->getLastName() << " " << employees[i]->getFirstName() << endl;
+                    if(employees[i]->getLastName() == lastName && employees[i]->getFirstName() == firstName){
+                        cout << "Vreau sa ii dau delete\n";
+                        delete employees[i];
+                        employees.erase(employees.begin() + i);
+                        break;
+                    }
+                }
+
+
                 if(found){
                     writeCSV("employee.csv", updateData, false);
                     cout << "Angajatul " << lastName << " " << firstName << " a fost sters cu succes!\n";
