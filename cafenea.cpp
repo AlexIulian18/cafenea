@@ -89,7 +89,7 @@ class Manager : public Employee, public Counter<Manager> {
 
 class Waiter : public Employee, public Counter<Waiter> {
     
-    public:
+    public: 
         Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays)
             : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays) {}
         void displayInfo() const override {
@@ -242,7 +242,7 @@ class Menu {
                     continue; 
                 }
 
-                vector<string> row = {"\n",lastName, firstName, job, city, to_string(nrOfDays), workDaysInput, startTime, endTime};
+                vector<string> row = {lastName, firstName, job, city, to_string(nrOfDays), workDaysInput, startTime, endTime};
 
                 // Verifică datele introduse
                 cout << "Randul adaugat: ";
