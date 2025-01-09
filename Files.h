@@ -17,6 +17,6 @@ vector<string> splitLine(const string& line, char delimiter);
 vector<string> splitString(const string& input, char delimiter);
 string capitalizeWords(const string& input);
 string joinString(const vector<string>& vec, const string& delimiter);
-
+string trim(const string& str);
 
 #endif

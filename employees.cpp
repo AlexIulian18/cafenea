@@ -1,130 +1,88 @@
 #include <iostream>
-#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <vector>
 #include <cctype>
+#include "employees.h"
 #include "Files.h"
-#include "produse.h"
-#include "comenzi.h"
 
 using namespace std;
 
-template <typename T>
-class Counter {
-    static int count;
-public:
-    Counter() { count++; }
-    ~Counter() {
-        count--; }
-    static int getCount() { return count; }
-};
-template <typename T>
-int Counter<T>::count = 0;
 
-class Employee {
-    protected:
-        string lastName;
-        string firstName;
-        string job;
-        string startTime;
-        string endTime;
-        string workDays;
-        int nrOfDays;
-        string roleDescription;
+Employee::Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const string& wDays)
+    : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays){
+}
+string Employee::getLastName() const {
+    return lastName;
+}
+string Employee::getFirstName() const {
+    return firstName;
+}
+void Employee::displayInfo() const{
+        cout << job << ": " << lastName << " " << firstName << endl;
+        cout << "Program de lucru: " << startTime << " - " << endTime << endl;
+        cout << "Numarul de zile lucrate: " << nrOfDays << endl;
+        cout << "Zilele de lucru: " << workDays << endl;
+        cout << "\n--------------------------------------------\n";
+}
+void Employee::displayRoleDescription(){
+    cout << roleDescription << endl;
+}
+Employee::~Employee(){
+    cout << "Destructor angajat/employee\n";
+}
 
-    public:
-        Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const string& wDays)
-            : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays){
-        }
+Manager::Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
+    : Employee(fn, ln, "Manager", sT, eT,nr, wDays) {
+}
 
-        string getLastName() const {
-            return lastName;
-        }
+void Manager::displayInfo() const{
+    Employee::displayInfo();
+}
 
-        string getFirstName() const {
-            return firstName;
-        }
+void Manager::displayRoleDescription() {
+    roleDescription = "Coordoneaza echipa si gestioneaza operatiunile generale.";
+    cout << roleDescription << endl;
+}
 
-        virtual void displayInfo() const{
-            cout << job << ": " << lastName << " " << firstName << endl;
-            cout << "Program de lucru: " << startTime << " - " << endTime << endl;
-            cout << "Numarul de zile lucrate: " << nrOfDays << endl;
-            cout << "Zilele de lucru: " << workDays << endl;
-            cout << "\n--------------------------------------------\n";
-        }
-
-        virtual void displayRoleDescription() const{
-            cout << roleDescription << endl;
-        }
-        virtual ~Employee(){
-        };
-
-};
-class Manager : public Employee, public Counter<Manager> {
+Manager::~Manager() {
+    cout << "Destructor manager\n";
+}
     
-    public:
-        Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
-            : Employee(fn, ln, "Manager", sT, eT,nr, wDays) {
-            }
-
-        void displayInfo() const override {
-            Employee::displayInfo();
-        }
-
-        void displayRoleDescription() {
-            roleDescription = "Coordoneaza echipa si gestioneaza operatiunile generale.";
-            cout << roleDescription << endl;
-        }
-
-        ~Manager() {
-        }
-};
-class Waiter : public Employee, public Counter<Waiter> {
-    
-    public: 
-        Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays)
+Waiter::Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays)
             : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays) {}
-        void displayInfo() const override {
+        
+        
+void Waiter::displayInfo() const{
             Employee::displayInfo();
         }
 
-        void displayRoleDescription() {
+void Waiter::displayRoleDescription(){
             roleDescription = "Se ocupa de preluarea comenzilor, servirea clientilor si asigurarea unei experiente placute pentru acestia.";
             cout << roleDescription << endl;
         }
 
-        ~Waiter() {
+Waiter::~Waiter() {
+            cout << "Destructor ospatar\n";
         }
-};
-class Barista : public Employee, public Counter<Barista> {
 
-    public:
-        Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
+Barista::Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
             : Employee(fn, ln, "Barista", sT, eT, nr, wDays) {}
 
-        void displayInfo() const override {
+void Barista::displayInfo() const{
             Employee::displayInfo();
         }
 
-        void displayRoleDescription() {
-            roleDescription = "Pregateste bauturi precum cafeaua si ceaiul.";
-            cout << roleDescription << endl;
-        }
+void Barista::displayRoleDescription() {
+        roleDescription = "Pregateste bauturi precum cafeaua si ceaiul.";
+        cout << roleDescription << endl;
+}
 
-        ~Barista() {
-        }
-};
+Barista::~Barista() {
+        cout << "Destructor barista\n";
+}
 
-//Singleton
-class Menu {
-    private:
-        vector<Employee*> employees;
-        static Menu* instance;
-
-        // Constructor privat
-        Menu() {
+Menu::Menu() {
             try {
                 vector<vector<string>> data = readCSV("employee.csv");
                 cout << data.size() << " angajati gasiti in baza de date.\n";
@@ -132,6 +90,11 @@ class Menu {
                 for (int j = 1; j < data.size(); j++) {
 
                     const auto& line = data[j];
+                    
+                    for(int i = 0; i < line.size(); i++){
+                        cout << line[i] << " ";
+                    }
+                    cout << endl;
                     if (line.size() < 8) continue;
 
                     string firstName = line[1];
@@ -154,24 +117,24 @@ class Menu {
             } catch (const exception& e) {
                 cerr << "Eroare: " << e.what() << endl;
             }
-        }
-        // Destructor pentru eliberarea memoriei
-        ~Menu() {
-            for (auto employee : employees) {
-                delete employee;
-            }
-        }
+}
+// Destructor pentru eliberarea memoriei
+Menu::~Menu() {
+    for (auto employee : employees) {
+        delete employee;
+    }
+}
 
-    public:
+Menu* Menu::getInstance() {
+    if (instance == nullptr) {
+        instance = new Menu();
+        cout << "S-a creat o instanta pentru prima data a meniului.\n";
+    }
+    return instance;
+}
 
-        static Menu* getInstance() {
-            if (instance == nullptr) {
-                instance = new Menu();
-                cout << "S-a creat o instanta pentru prima data a meniului.\n";
-            }
-            return instance;
-        }
-        void addEmployee() {
+
+void Menu::addEmployee() {
             try {
                 cout << "Introduceti nr de angajati pe care doriti sa ii adaugati: ";
                 int n;
@@ -242,8 +205,9 @@ class Menu {
         } catch (const exception& e) {
             cerr << "Eroare: " << e.what() << endl;
         }
-    }
-        void displayAllEmployees() {
+}
+
+void Menu::displayAllEmployees() {
             try {
                 vector<vector<string>> data = readCSV("employee.csv"); // Recitește fișierul
                 if (data.empty()) {
@@ -262,18 +226,21 @@ class Menu {
                 cerr << "Eroare la afișare: " << e.what() << endl;
             }
         }
-        void printNumberOfEmployees() {
+
+void Menu::printNumberOfEmployees() {
 
         int nrOfEmployees = 0;
         nrOfEmployees = Manager::getCount() + Waiter::getCount() + Barista::getCount();
         cout << "Numarul de angajati: " << nrOfEmployees << endl;
-    }
-        void displayEmployeeCounts() {
+}
+        
+void Menu::displayEmployeeCounts() {
         cout << "Numar de Manageri: " << Counter<Manager>::getCount() << endl;
         cout << "Numar de Ospatari: " << Counter<Waiter>::getCount() << endl;
         cout << "Numar de Barista: "  << Counter<Barista>::getCount() << endl;
-    }
-        void deleteEmployee (const string& lastName, const string& firstName){
+}
+
+void Menu::deleteEmployee (const string& lastName, const string& firstName){
 
             try{
             
@@ -309,7 +276,8 @@ class Menu {
             }catch (const exception& e) {
             cerr << "Eroare: " << e.what() << endl;}
         }
-        void displayRoleDescription() {
+
+void Menu::displayRoleDescription() {
 
         int choiceForRole;
         cout << "Alegeti un job pentru a vedea descrierea rolului:\n";
@@ -343,12 +311,13 @@ class Menu {
                 cout << "Optiune invalida!\n";
         }
     }
-        static void destroyInstance() {
-            delete instance;
-            instance = nullptr;
-        }
 
-        void employeeMenu(){
+void Menu::destroyInstance() {
+    delete instance;
+    instance = nullptr;
+}
+
+void Menu::employeeMenu(){
             int choice;
             cout << "Alegeti o optiune:\n";
             cout << "1. Afiseaza numarul de angajati\n";
@@ -407,51 +376,6 @@ class Menu {
                 default:
                     cout << "Optiune invalida!\n";
             }
-        }
-};
+}
 
 Menu* Menu::instance = nullptr;
-
-int main(){
-    
-    Menu* menu = Menu::getInstance();
-    produseMenu* produseMenu = produseMenu::getInstance();
-    comenziMenu* comenziMenu = comenziMenu::getInstance();
-    
-    int alegere;
-
-    cout << "Bine ati venit la Cafenea!\n";
-    cout << "Alegeti o optiune:\n";
-
-    do{
-        cout << "1. Gestioneaza angajatii\n";
-        cout << "2. Gestioneaza produsele\n";
-        cout << "3. Gestioneaza comenzile\n";
-        cout << "0. Iesire\n";
-        cin >> alegere;
-        cin.ignore();
-
-        switch(alegere){
-            case 1:
-                menu->employeeMenu();
-                break;
-            case 2:
-                produseMenu::getInstance()->MenuForProducts();
-                break;
-            case 3:
-                comenziMenu::getInstance()->MenuForOrders();
-                break;
-            case 0:
-                cout << "La revedere!\n";
-                break;
-            default:
-                cout << "Optiune invalida!\n";
-        }
-
-    }while(alegere != 0);
-    
-    Menu::destroyInstance();
-    produseMenu::destroyInstance();
-    comenziMenu::destroyInstance();
-    return 0;
-}

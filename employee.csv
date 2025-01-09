@@ -1,13 +1,26 @@
 Nume,Prenume,Functie,Oras,Nr de zile,Zile Lucrate,Program Lucru Inceput,Program Lucru Sfarsit
-Florin,Diana,Manager,Iasi,2,Marti Joi,16:00,18:00
-Marina,Diana,Manager,Iasi,2,Marti Joi,16:00,18:00
-Madonna,Raul,Manager,Iasi,2,Marti Joi,16:00,18:00
-Raizo,Raizo,Manager,Iasi,2,Marti Joi,16:00,18:00
-Maria,Maria,Barista,Brasov,3,Marti Joi Vineri,10:00,12:00
-Jean,Jean,Manager,Timisoara,1,LUni,12:49,14:28
-Rares,Radu,Ospatar,Brasov,1,Marti,14:02,14:03
-Ion,Tzopa,Ospatar,Iasi,3,Luni Marti Duminica,17:24,19:24
-Paul,Paul,Barista,Brasov,3,Luni Marti MIercuri,23:00,05:00
-Oprea,Daniel,Ospatar,Iasi,2,Joi Vineri,12:27,15:29
-Tatic,Op,Barista,Brasov,3,Miercuri Joi Duminica,13:16,16:19
-Hori,Porny,Manager,Bucuresti,7,Luni Marti Miercuri Joi Vineri Sambata Duminica,00:00,23:59
+Ionescu,Maria,Barista,Bucuresti,5,Luni Marti Miercuri Joi Vineri,08:00,16:00  
+Popescu,Andrei,Manager,Cluj-Napoca,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
+Vasilescu,Elena,Ospatar,Timisoara,4,Luni Marti Joi Sambata,12:00,20:00  
+Dumitrescu,Radu,Barista,Iasi,3,Luni Joi Duminica,06:00,14:00  
+Preda,Ioana,Manager,Brasov,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
+Marinescu,Adrian,Ospatar,Bucuresti,4,Luni Joi Vineri Sambata,14:00,22:00  
+Georgescu,Simona,Barista,Cluj-Napoca,3,Luni Miercuri Vineri,07:00,15:00  
+Stoica,Claudiu,Manager,Timisoara,5,Luni Marti Miercuri Joi Vineri,09:00,17:00  
+Petrescu,Alexandra,Ospatar,Iasi,4,Luni Joi Sambata Duminica,11:00,19:00  
+Mihai,Cristina,Barista,Brasov,3,Marti Joi Sambata,05:00,13:00  
+Rusu,Ioan,Manager,Bucuresti,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
+Enescu,Laura,Ospatar,Cluj-Napoca,5,Luni Marti Miercuri Joi Vineri,13:00,21:00  
+Toma,Daniel,Barista,Timisoara,4,Luni Marti Sambata Duminica,07:00,15:00
+Ilie,Florin,Manager,Iasi,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
+Chiriac,Alina,Ospatar,Brasov,4,Luni Joi Sambata Duminica,14:00,22:00  
+Dinu,Mihai,Barista,Bucuresti,3,Luni Marti Joi,08:00,16:00  
+Lupu,Adela,Manager,Cluj-Napoca,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
+Gheorghe,Cosmin,Ospatar,Timisoara,4,Luni Miercuri Joi Sambata,12:00,20:00  
+Constantinescu,Denisa,Barista,Iasi,5,Luni Marti Miercuri Vineri Sambata,06:00,14:00  
+Nistor,Vlad,Manager,Brasov,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
+Voinea,Corina,Ospatar,Bucuresti,4,Luni Joi Sambata Duminica,15:00,23:00  
+Olteanu,Sergiu,Barista,Cluj-Napoca,3,Marti Joi Sambata,07:00,15:00  
+Ciobanu,Anca,Manager,Timisoara,5,Luni Marti Miercuri Joi Vineri,09:00,17:00  
+Grigore,Diana,Ospatar,Iasi,4,Luni Joi Sambata Duminica,14:00,22:00  
+Matei,Marius,Barista,Brasov,5,Luni Marti Miercuri Joi Vineri,08:00,16:00  
