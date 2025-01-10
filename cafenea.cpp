@@ -427,13 +427,13 @@ Menu* Menu::instance = nullptr;
 void generateDailyReport() {
     try {
         // Citire date angajați
-        vector<vector<string>> employeesData = readCSV("employees.csv");
+        vector<vector<string>> employeesData = readCSV("employee.csv");
 
         // Citire date comenzi
         vector<vector<string>> ordersData = readCSV("orders.csv");
 
         // Citire produse
-        vector<vector<string>> productsData = readCSV("produse.csv");
+        vector<vector<string>> productsData = readCSV("products.csv");
 
         double totalRevenue = 0.0, totalCost = 0.0, totalSalaries = 0.0;
 
