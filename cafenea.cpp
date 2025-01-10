@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <map>
 #include "Files.h"
 #include "produse.h"
 #include "comenzi.h"
@@ -409,6 +410,7 @@ class Menu {
                 case 6:
                     displayRoleDescription();
                     break;
+                
                 case 0:
                     cout << "La revedere!\n";
                     break;
@@ -419,6 +421,67 @@ class Menu {
 };
 
 Menu* Menu::instance = nullptr;
+
+#include <map>
+
+void generateDailyReport() {
+    try {
+        // Citire date angajați
+        vector<vector<string>> employeesData = readCSV("employees.csv");
+
+        // Citire date comenzi
+        vector<vector<string>> ordersData = readCSV("orders.csv");
+
+        // Citire produse
+        vector<vector<string>> productsData = readCSV("produse.csv");
+
+        double totalRevenue = 0.0, totalCost = 0.0, totalSalaries = 0.0;
+
+        // Calcul venituri din comenzi
+        for (size_t i = 1; i < ordersData.size(); ++i) {
+            totalRevenue += stod(ordersData[i][5]); // Coloana Total
+        }
+
+        // Calcul costuri de producție din produse
+        map<string, double> productionCosts;
+        for (size_t i = 1; i < productsData.size(); ++i) {
+            string productName = productsData[i][0];
+            double cost = stod(productsData[i][4]); // Coloana Cost de producție
+            int sold = stoi(productsData[i][5]);    // Coloana Numar Vandut
+            productionCosts[productName] = cost * sold;
+            totalCost += productionCosts[productName];
+        }
+
+        // Calcul salarii angajați
+        for (size_t i = 1; i < employeesData.size(); ++i) {
+            totalSalaries += stod(employeesData[i][8]); // Coloana Salariu
+        }
+
+        // Generare raport
+        ofstream reportFile("financial_report.csv");
+        if (reportFile.is_open()) {
+            reportFile << "Raport Zilnic Cafenea\n";
+            reportFile << "======================\n";
+            reportFile << "Venituri totale: " << fixed << setprecision(2) << totalRevenue << " RON\n";
+            reportFile << "Costuri produse: " << fixed << setprecision(2) << totalCost << " RON\n";
+            reportFile << "Salarii angajați: " << fixed << setprecision(2) << totalSalaries << " RON\n";
+            reportFile << "Profit net: " << fixed << setprecision(2) << (totalRevenue - totalCost - totalSalaries) << " RON\n";
+
+            reportFile << "\nCosturi detaliate per produs:\n";
+            for (const auto& [product, cost] : productionCosts) {
+                reportFile << " - " << product << ": " << cost << " RON\n";
+            }
+
+            reportFile.close();
+            cout << "Raportul zilnic a fost generat cu succes în 'financial_report.csv'.\n";
+        } else {
+            cerr << "Nu s-a putut deschide fișierul pentru scrierea raportului.\n";
+        }
+    } catch (const exception& e) {
+        cerr << "Eroare la generarea raportului: " << e.what() << endl;
+    }
+}
+
 
 int main(){
     
@@ -437,6 +500,7 @@ int main(){
         cout << "2. Gestioneaza produsele\n";
         cout << "3. Gestioneaza comenzile\n";
         cout << "4. Gestioneaza evenimentele\n";
+        cout << "5. Genereaza raport zilnic\n";
         cout << "0. Iesire\n";
         cin >> alegere;
         cin.ignore();
@@ -453,6 +517,9 @@ int main(){
                 break;
             case 4:
                 EvenimenteMenu::getInstance()->MenuForEvenimente();
+                break;
+            case 5:
+                generateDailyReport();
                 break;
             case 0:
                 cout << "La revedere!\n";
