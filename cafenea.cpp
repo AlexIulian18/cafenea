@@ -8,6 +8,7 @@
 #include "Files.h"
 #include "produse.h"
 #include "comenzi.h"
+#include "events.h"
 
 using namespace std;
 
@@ -33,10 +34,11 @@ class Employee {
         string workDays;
         int nrOfDays;
         string roleDescription;
+        int salary;
 
     public:
-        Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const string& wDays)
-            : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays){
+        Employee(const string& fn, const string& ln, const string& jb, const string& sT, const string& eT, int nr,  const string& wDays, int sal)
+            : firstName(fn), lastName(ln), job(jb), startTime(sT), endTime(eT), nrOfDays(nr), workDays(wDays), salary(sal){
         }
 
         string getLastName() const {
@@ -52,6 +54,7 @@ class Employee {
             cout << "Program de lucru: " << startTime << " - " << endTime << endl;
             cout << "Numarul de zile lucrate: " << nrOfDays << endl;
             cout << "Zilele de lucru: " << workDays << endl;
+            cout << "Salariu: " << salary << " RON\n";
             cout << "\n--------------------------------------------\n";
         }
 
@@ -65,8 +68,8 @@ class Employee {
 class Manager : public Employee, public Counter<Manager> {
     
     public:
-        Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
-            : Employee(fn, ln, "Manager", sT, eT,nr, wDays) {
+        Manager(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays, int sal)
+            : Employee(fn, ln, "Manager", sT, eT,nr, wDays,sal) {
             }
 
         void displayInfo() const override {
@@ -84,8 +87,8 @@ class Manager : public Employee, public Counter<Manager> {
 class Waiter : public Employee, public Counter<Waiter> {
     
     public: 
-        Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays)
-            : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays) {}
+        Waiter(const string& fn, const string& ln, const string& sT, const string& eT, int nr, const string& wDays,int sal)
+            : Employee(fn, ln, "Ospatar", sT, eT, nr, wDays,sal) {}
         void displayInfo() const override {
             Employee::displayInfo();
         }
@@ -101,8 +104,8 @@ class Waiter : public Employee, public Counter<Waiter> {
 class Barista : public Employee, public Counter<Barista> {
 
     public:
-        Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays)
-            : Employee(fn, ln, "Barista", sT, eT, nr, wDays) {}
+        Barista(const string& fn, const string& ln, const string& sT, const string& eT,int nr, const string& wDays,int sal)
+            : Employee(fn, ln, "Barista", sT, eT, nr, wDays,sal) {}
 
         void displayInfo() const override {
             Employee::displayInfo();
@@ -132,7 +135,7 @@ class Menu {
                 for (int j = 1; j < data.size(); j++) {
 
                     const auto& line = data[j];
-                    if (line.size() < 8) continue;
+                    if (line.size() < 9) continue;
 
                     string firstName = line[1];
                     string lastName = line[0];
@@ -142,13 +145,14 @@ class Menu {
                     string workDays = line[5];
                     string startTime = line[6];
                     string endTime = line[7];
+                    int salary = stoi(line[8]);
 
                     if (job == "Manager") {
-                        employees.push_back(new Manager(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                        employees.push_back(new Manager(firstName, lastName, startTime, endTime, nrOfDays, workDays,salary));
                     } else if (job == "Ospatar") {
-                        employees.push_back(new Waiter(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                        employees.push_back(new Waiter(firstName, lastName, startTime, endTime, nrOfDays, workDays,salary));
                     } else if (job == "Barista") {
-                        employees.push_back(new Barista(firstName, lastName, startTime, endTime, nrOfDays, workDays));
+                        employees.push_back(new Barista(firstName, lastName, startTime, endTime, nrOfDays, workDays,salary));
                     }
                 }
             } catch (const exception& e) {
@@ -183,7 +187,7 @@ class Menu {
                 cout << "Introduceti datele pentru angajatul " << i + 1 << ":\n";
 
                 string lastName, firstName, job, city, workDaysInput, startTime, endTime;
-                int nrOfDays;
+                int nrOfDays, salary;
 
                 cout << "Nume: ";
                 getline(cin, lastName);
@@ -214,18 +218,22 @@ class Menu {
                 cout << "Ora de sfarsit: ";
                 getline(cin, endTime);
 
+                cout << "Salariu: ";
+                cin >> salary;
+                cin.ignore();
+
                 if (job == "Manager") {
-                    employees.push_back(new Manager(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
+                    employees.push_back(new Manager(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput,salary));
                 } else if (job == "Ospatar") {
-                    employees.push_back(new Waiter(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
+                    employees.push_back(new Waiter(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput,salary));
                 } else if (job == "Barista") {
-                    employees.push_back(new Barista(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput));
+                    employees.push_back(new Barista(firstName, lastName, startTime, endTime,  nrOfDays, workDaysInput,salary));
                 } else {
                     cerr << "Job invalid! Angajatul nu a fost adaugat.\n";
                     continue; 
                 }
 
-                vector<string> row = {lastName, firstName, job, city, to_string(nrOfDays), workDaysInput, startTime, endTime};
+                vector<string> row = {lastName, firstName, job, city, to_string(nrOfDays), workDaysInput, startTime, endTime,to_string(salary)};
 
                 // Verifică datele introduse
                 cout << "Randul adaugat: ";
@@ -322,19 +330,19 @@ class Menu {
 
         switch(choiceForRole){
             case 1:{
-                Manager m("fn", "ln", "08:00", "16:00", 0, {"zile"});
+                Manager m("fn", "ln", "08:00", "16:00", 0, {"zile"},0);
                 m.displayRoleDescription();
                 cout << "----------------------------------------------\n";
                 break;
             }
             case 2:{
-                Waiter w("fn", "ln", "08:00", "16:00", 0, {"zile"});
+                Waiter w("fn", "ln", "08:00", "16:00", 0, {"zile"},0);
                 w.displayRoleDescription();
                 cout << "----------------------------------------------\n";
                 break;
             }
             case 3:{
-                Barista b("fn", "ln", "08:00", "16:00", 0, {"zile"});
+                Barista b("fn", "ln", "08:00", "16:00", 0, {"zile"},0);
                 b.displayRoleDescription();
                 cout << "----------------------------------------------\n";
                 break;
@@ -417,6 +425,7 @@ int main(){
     Menu* menu = Menu::getInstance();
     produseMenu* produseMenu = produseMenu::getInstance();
     comenziMenu* comenziMenu = comenziMenu::getInstance();
+    EvenimenteMenu* EvenimenteMenu = EvenimenteMenu::getInstance();
     
     int alegere;
 
@@ -427,6 +436,7 @@ int main(){
         cout << "1. Gestioneaza angajatii\n";
         cout << "2. Gestioneaza produsele\n";
         cout << "3. Gestioneaza comenzile\n";
+        cout << "4. Gestioneaza evenimentele\n";
         cout << "0. Iesire\n";
         cin >> alegere;
         cin.ignore();
@@ -441,6 +451,9 @@ int main(){
             case 3:
                 comenziMenu::getInstance()->MenuForOrders();
                 break;
+            case 4:
+                EvenimenteMenu::getInstance()->MenuForEvenimente();
+                break;
             case 0:
                 cout << "La revedere!\n";
                 break;
@@ -453,5 +466,6 @@ int main(){
     Menu::destroyInstance();
     produseMenu::destroyInstance();
     comenziMenu::destroyInstance();
+    EvenimenteMenu::destroyInstance();
     return 0;
 }

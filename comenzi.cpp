@@ -11,8 +11,8 @@
 
 using namespace std;
 
-Comanda::Comanda(const string& nm, const string& pr, const string& cty, int nr, const string& prd)
-    : nume(nm), prenume(pr), oras(cty), nrProduse(nr), produse(prd) {}
+Comanda::Comanda(const string& nm, const string& pr, const string& cty, int nr, const string& prd,double tot, double disc = 0.0)
+    : nume(nm), prenume(pr), oras(cty), nrProduse(nr), produse(prd), total(tot),discount(disc) {}
 
 void Comanda::displayOrderInfo() const {
     cout << "Nume: " << nume << "\n";
@@ -20,6 +20,9 @@ void Comanda::displayOrderInfo() const {
     cout << "Oras: " << oras << "\n";
     cout << "Numar de produse: " << nrProduse << "\n";
     cout << "Produse: " << produse << "\n";
+    cout << "Total comanda: " << fixed << setprecision(1) << total << " RON\n";
+    cout << "Discount: " << fixed << setprecision(1) << discount << " RON\n";
+    cout << "Total de plata dupa reducere: " << fixed << setprecision(1) << (total - total*discount) << " RON\n";
     cout << "--------------------------------------------\n";
 }
 
@@ -38,9 +41,15 @@ const string& Comanda::getProduse() const {
 int Comanda::getNrProduse() {
     return nrProduse;
 }
+double Comanda::getTotal() {
+    return total - (total * discount);
+}
+
+void Comanda::setDiscount(double disc) {
+    discount = disc;
+}
 
 Comanda::~Comanda() {
-    cout << "Destructor comanda\n";
 }
 
 comenziMenu::comenziMenu() {
@@ -67,7 +76,7 @@ comenziMenu::comenziMenu() {
             cout << endl;
 
             // Verifică dacă linia are suficiente câmpuri
-            if (line.size() < 5) {
+            if (line.size() < 6) {
                 cerr << "Avertisment: Linia " << i << " nu are suficiente campuri. Este ignorata.\n";
                 continue;
             }
@@ -78,9 +87,10 @@ comenziMenu::comenziMenu() {
             string oras = line[2];
             int nrProduse = stoi(line[3]);
             string produse = line[4];
+            double total = stod(line[5]);
 
             // Creează și adaugă o nouă comandă
-            comenzi.push_back(new Comanda(nume, prenume, oras, nrProduse, produse));
+            comenzi.push_back(new Comanda(nume, prenume, oras, nrProduse, produse, total));
         }
     } catch (const runtime_error& e) {
         cerr << "Eroare la citirea fișierelor CSV: " << e.what() << endl;
@@ -107,8 +117,32 @@ comenziMenu::~comenziMenu(){
     comenzi.clear();
 }
 
+double comenziMenu::calculateDiscount(const string& nume, const string& prenume) {
+    int orderCount = 0;
+    double totalSpent = 0.0;
+    double discount = 0.0;
+
+    // Citim istoricul comenzilor pentru acest client din orders.csv
+    vector<vector<string>> orderHistory = readCSV("orders.csv");
+    for (const auto& order : orderHistory) {
+        if (order[0] == nume && order[1] == prenume) {
+            orderCount++;
+            totalSpent += stod(order[5]);
+        }
+    }
+
+    // Aplica reducerile
+    if (orderCount >= 3) {
+        discount = 0.05;  // 5% reducere pentru 3 comenzi
+    } else if (totalSpent >= 200) {
+        discount = 0.10;  // 10% reducere pentru 200 RON cheltuiți
+    }
+
+    return discount;
+}
+
 void comenziMenu::addOrder() {
-    string nume, prenume, oras, produse;
+    string nume, prenume, oras;
     int nrProduse;
 
     cout << "Introduceti numele clientului: ";
@@ -117,43 +151,87 @@ void comenziMenu::addOrder() {
     cin >> prenume;
     cout << "Introduceti orasul unde se afla cafeneaua: ";
     cin >> oras;
-    cout << "Introduceti numarul de produse: ";
+
+    cout << "Introduceti numarul de tipuri de produse disponibile: ";
     cin >> nrProduse;
-    cin.ignore(); // Curăță bufferul de intrare
+    cin.ignore();
 
-    cout << "Introduceti produsele (separate prin virgula): ";
-    getline(cin, produse);
-
-    vector<string> productList = splitString(produse, ',');
-
+    map<string, int> productsOrdered;
+    vector<string> orderedProducts;
     double total = 0.0;
     bool allProductsAvailable = true;
 
-    for (const auto& product : productList) {
-        string trimmedProduct = trim(product); // Curăți spațiile albe
+    vector<vector<string>> productData = readCSV("products.csv");
 
-        // Verifici dacă produsul este în map-ul de produse
-        if (productData.find(trimmedProduct) != productData.end() &&
-            productData[trimmedProduct].find(oras) != productData[trimmedProduct].end()) {
-            total += productData[trimmedProduct][oras]; // Adaugi prețul la total
-        } else {
-            cout << "Produsul \"" << trimmedProduct << "\" nu este disponibil in orasul " << oras << ".\n";
+    // Procesăm produsele comandate
+    for (int i = 0; i < nrProduse; ++i) {
+        string productName;
+        int quantity;
+
+        cout << "Introduceti numele produsului " << (i + 1) << ": ";
+        getline(cin, productName);
+        productName = trim(productName);
+
+        cout << "Cate unitati din " << productName << " doriti? ";
+        cin >> quantity;
+        cin.ignore();
+
+        bool found = false;
+        for (size_t j = 1; j < productData.size(); ++j) {
+            vector<string> row = productData[j];
+            string csvProductName = trim(row[0]);
+            string csvCity = trim(row[2]);
+            int stock = stoi(row[6]);
+            double price = stod(row[3]);
+
+            if (csvProductName == productName && csvCity == oras && stock >= quantity) {
+                total += price * quantity;
+                productsOrdered[productName] = quantity;
+                orderedProducts.push_back(productName + " x" + to_string(quantity));
+                row[6] = to_string(stock - quantity);
+                productData[j] = row;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Produsul \"" << productName << "\" nu este disponibil sau nu exista suficient stoc.\n";
             allProductsAvailable = false;
         }
     }
 
     if (allProductsAvailable) {
-        cout << "Comanda a fost plasata cu succes. Total: " << total << " RON.\n";
-        comenzi.push_back(new Comanda(nume, prenume, oras, nrProduse, produse)); // Salvezi comanda
+        // Calculăm discount-ul pentru client
+        double discount = calculateDiscount(nume, prenume);
+        cout << "Reducere aplicata: " << discount * 100 << "%\n";
+
+        total -= total * discount;  // Aplica reducerea la total
+
+        string produse = joinString(orderedProducts, " | ");
+        comenzi.push_back(new Comanda(nume, prenume, oras, nrProduse, produse, total, discount));
+
+        ostringstream totalStream;
+        totalStream << fixed << setprecision(1) << total;
+        string totalFormatted = totalStream.str();
+
+        // Salvăm comanda în orders.csv
+        vector<vector<string>> orderData = {{nume, prenume, oras, to_string(nrProduse), produse, totalFormatted}};
+        writeCSV("orders.csv", orderData, true);
+
+        // Salvăm stocurile actualizate în products.csv
+        writeCSV("products.csv", productData, false);
     } else {
-        cout << "Comanda nu a fost procesată din cauza produselor indisponibile.\n";
+        cout << "Comanda nu a fost procesata din cauza produselor indisponibile.\n";
     }
 }
+
 
 void comenziMenu::displayAllOrders() {
     for (const auto& comanda : comenzi) {
         comanda->displayOrderInfo();
     }
+    cout << "Numar comenzi incarcate: " << comenzi.size() << endl;
 }
 
 void comenziMenu::displayAllOrdersByCity() {
@@ -178,19 +256,18 @@ void comenziMenu::displayAllOrdersByCity() {
     }
 }
 
-/*void comenziMenu::calculateTotalByCity() {
+void comenziMenu::calculateTotalByCity() {
     map<string, double> totalByCity;
 
     for (const auto& comanda : comenzi) {
-        totalByCity[comanda->getOras()] += comanda->getNrProduse();
+        totalByCity[comanda->getOras()] += comanda->getTotal();
     }
 
     cout << "Total produse pe oras:\n";
     for (const auto& [oras, total] : totalByCity) {
-        cout << oras << ": " << total << " produse\n";
+        cout << oras << ": " << fixed << setprecision(2) << total << " RON\n";
     }
 }
-*/
 
 void comenziMenu::MenuForOrders(){
     int choice;
@@ -198,7 +275,7 @@ void comenziMenu::MenuForOrders(){
     cout << "1. Adauga o comanda\n";
     cout << "2. Afiseaza toate comenzile\n";
     cout << "3. Afiseaza comenzile dintr-un oras\n";
-    cout << "4. Calculeaza totalul de produse pe oras\n";
+    cout << "4. Calculeaza totalul comenzilor pe oras\n";
     cout << "0. Iesire\n";
     cin >> choice;
     cin.ignore();
@@ -215,7 +292,7 @@ void comenziMenu::MenuForOrders(){
             displayAllOrdersByCity();
             break;
         case 4:
-            //calculateTotalByCity();
+            calculateTotalByCity();
             break;
         case 0:
             break;

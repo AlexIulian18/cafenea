@@ -1,26 +1,8 @@
-Nume,Prenume,Functie,Oras,Nr de zile,Zile Lucrate,Program Lucru Inceput,Program Lucru Sfarsit
-Ionescu,Maria,Barista,Bucuresti,5,Luni Marti Miercuri Joi Vineri,08:00,16:00  
-Popescu,Andrei,Manager,Cluj-Napoca,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
-Vasilescu,Elena,Ospatar,Timisoara,4,Luni Marti Joi Sambata,12:00,20:00  
-Dumitrescu,Radu,Barista,Iasi,3,Luni Joi Duminica,06:00,14:00  
-Preda,Ioana,Manager,Brasov,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
-Marinescu,Adrian,Ospatar,Bucuresti,4,Luni Joi Vineri Sambata,14:00,22:00  
-Georgescu,Simona,Barista,Cluj-Napoca,3,Luni Miercuri Vineri,07:00,15:00  
-Stoica,Claudiu,Manager,Timisoara,5,Luni Marti Miercuri Joi Vineri,09:00,17:00  
-Petrescu,Alexandra,Ospatar,Iasi,4,Luni Joi Sambata Duminica,11:00,19:00  
-Mihai,Cristina,Barista,Brasov,3,Marti Joi Sambata,05:00,13:00  
-Rusu,Ioan,Manager,Bucuresti,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
-Enescu,Laura,Ospatar,Cluj-Napoca,5,Luni Marti Miercuri Joi Vineri,13:00,21:00  
-Toma,Daniel,Barista,Timisoara,4,Luni Marti Sambata Duminica,07:00,15:00
-Ilie,Florin,Manager,Iasi,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
-Chiriac,Alina,Ospatar,Brasov,4,Luni Joi Sambata Duminica,14:00,22:00  
-Dinu,Mihai,Barista,Bucuresti,3,Luni Marti Joi,08:00,16:00  
-Lupu,Adela,Manager,Cluj-Napoca,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00  
-Gheorghe,Cosmin,Ospatar,Timisoara,4,Luni Miercuri Joi Sambata,12:00,20:00  
-Constantinescu,Denisa,Barista,Iasi,5,Luni Marti Miercuri Vineri Sambata,06:00,14:00  
-Nistor,Vlad,Manager,Brasov,5,Luni Marti Miercuri Joi Vineri,10:00,18:00  
-Voinea,Corina,Ospatar,Bucuresti,4,Luni Joi Sambata Duminica,15:00,23:00  
-Olteanu,Sergiu,Barista,Cluj-Napoca,3,Marti Joi Sambata,07:00,15:00  
-Ciobanu,Anca,Manager,Timisoara,5,Luni Marti Miercuri Joi Vineri,09:00,17:00  
-Grigore,Diana,Ospatar,Iasi,4,Luni Joi Sambata Duminica,14:00,22:00  
-Matei,Marius,Barista,Brasov,5,Luni Marti Miercuri Joi Vineri,08:00,16:00  
+Nume,Prenume,Functie,Oras,Nr de zile,Zile Lucrate,Program Lucru Inceput,Program Lucru Sfarsit,Salariu(RON)
+Ionescu,Maria,Barista,Bucuresti,5,Luni Marti Miercuri Joi Vineri,08:00,16:00,2700
+Popescu,Andrei,Manager,Cluj-Napoca,6,Luni Marti Miercuri Joi Vineri Sambata,09:00,17:00,1500
+Vasilescu,Elena,Ospatar,Timisoara,4,Luni Marti Joi Sambata,12:00,20:00,1560
+Dumitrescu,Radu,Barista,Iasi,3,Luni Joi Duminica,06:00,14:00,2340
+Preda,Ioana,Manager,Brasov,5,Luni Marti Miercuri Joi Vineri,10:00,18:00,1800
+Paul,Ion,Manager,Timisoara,1,marti,12:00,18:00,3000
+Jianu,Alex,Ospatar,Brasov,2,Luni Marti,12:30,19:30,2760

@@ -20,10 +20,11 @@ class Comanda{
         string prenume;
         string oras;
         int nrProduse;
-        int total;
+        double total;
         string produse;
+        double discount;
     public:
-        Comanda(const string& nm, const string& pr, const string& cty, int nr, const string& prd);
+        Comanda(const string& nm, const string& pr, const string& cty, int nr, const string& prd, double tot, double disc);
 
         virtual void displayOrderInfo() const;
         const string& getNume() const;
@@ -31,6 +32,8 @@ class Comanda{
         const string& getOras() const;
         const string& getProduse() const;
         int getNrProduse();
+        double getTotal();
+        void setDiscount(double disc);
         virtual ~Comanda();
 };
 
@@ -50,6 +53,8 @@ class comenziMenu{
         void MenuForOrders();
         static void destroyInstance();
         ~comenziMenu();
+
+        double calculateDiscount(const string& nume, const string& prenume);
 };
 
 

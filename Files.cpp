@@ -66,12 +66,31 @@ void writeCSV(const string& filename, const vector<vector<string>>& data, bool a
         throw runtime_error("Eroare: Nu s-a putut deschide fisierul " + filename);
     }
 
+    // Dacă adaugi într-un fișier existent, trebuie să te asiguri că fișierul se termină cu newline
+    if (append) {
+        // Deschidem fișierul pentru citire pentru a verifica ultimul caracter
+        ifstream readFile(filename);
+        if (readFile.is_open()) {
+            // Mergem la sfârșitul fișierului
+            readFile.seekg(-1, ios::end);
+            char lastChar;
+            readFile.get(lastChar); // Citim ultimul caracter
+
+            // Dacă ultimul caracter nu este un newline, adăugăm unul
+            if (lastChar != '\n') {
+                file.put('\n'); // Scriem newline înainte de a adăuga noile date
+            }
+
+            readFile.close();
+        }
+    }
+
     for(const auto& line : data){
         for(size_t i = 0; i < line.size(); ++i){
             file << line[i];
             if(i != line.size() - 1) file << ",";
         }
-        file << "\n";
+        file << endl;
     }
     file.close();
 }

@@ -1,11 +1,10 @@
 Produs,Categorie,Oras,Pret (RON),Cost de productie(RON),Numar Vandut,Stoc
-Espresso,Cafea,Bucuresti,7.0,1.5,200,500
-Espresso,Cafea,Bucuresti,7.0,1.5,100,500
-Espresso,Cafea,Iasi,7.0,1.5,200,500
-Croissant,Desert,Iasi,6.0,4.5,140,190
-Sandwich cu Pui,Sandwich,Brasov,15.0,5.0,170,275
-Sandwich cu Porc,Sandwich,Bucuresti,15.0,5.5,150,2502
-Suc Natural de Mere,Bauturi,Iasi,10.0,3.0,130,195
+Espresso,Cafea,Bucuresti,7.0,1.5,200,141
+Espresso,Cafea,Iasi,7.0,1.5,200,321
+Croissant,Desert,Iasi,6.0,4.5,140,181
+Sandwich cu Pui,Sandwich,Brasov,15.0,5.0,170,265
+Sandwich cu Porc,Sandwich,Bucuresti,15.0,5.5,150,2398
+Suc Natural de Mere,Bauturi,Iasi,10.0,3.0,130,183
 Suc Natural de Portocale,Bauturi,Cluj-Napoca,10.0,3.0,110,675
-Briosa,Desert,Bucuresti,9.0,3.0,190,124
+Briosa,Desert,Bucuresti,9.0,3.0,190,120
 Sandwich Cu Nimic,Sandwich,Iasi,9.5,3.0,170,18

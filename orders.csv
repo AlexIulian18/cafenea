@@ -1,9 +1,14 @@
-Nume,Prenume,Oras,Nr Produse,Produse
-Ion,Ionescu,Bucuresti,2,Espresso
-Ion,Ionescu,Bucuresti,1,Sandwich cu Porc
-Ion,Ionescu,Bucuresti,1,Briosa
-Maria,Popescu,Iasi,1,Espresso
-Maria,Popescu,Iasi,1,Suc Natural de Mere
-Maria,Popescu,Iasi,1,Sandwich Cu Nimic
-Maria,Popescu,Iasi,1,Croissant
-Maria,Popescu,Iasi,1,Suc Natural de Mere
+Nume,Prenume,Oras,Nr Produse,Produse,Total
+Koala,Kipiu,Iasi,2,Croissant x5 | Espresso x3,51.0
+Dorin,Banciu,Bucuresti,3,Briosa x3 | Sandwich cu Porc x4 | Espresso x9,150.000000
+Horea,Decebal,Bucuresti,2,Espresso x4 | Briosa x1,37.000000
+Tzututu,Iupapuia,Brasov,1,Sandwich cu Pui x10,150.0
+Qwerty,Luie,Iasi,2,Espresso x2 | Suc Natural de Mere x12,134.0
+Wuhuhuhu,Eminem,Bucuresti,1,Espresso x18,126.0
+Iur,Piu,Iasi,1,Espresso x1,7.0
+Tiu,Poi,Iasi,1,Espresso x100,700.0
+Nbm,Bas,Iasi,1,Espresso x50,350.0
+Gash,Hasg,Bucuresti,2,Espresso x123 | Sandwich cu Porc x100,2361.0
+Horea,Decebal,Bucuresti,1,Espresso x15,105.0
+Horea,Decebal,Bucuresti,1,Espresso x45,315.0
+Gash,Hasg,Bucuresti,1,Espresso x45,283.5
